@@ -6,7 +6,7 @@ A comprehensive, production-ready React Native starter template with Redux Toolk
 
 - ✅ **React Native 0.83** with New Architecture support
 - ✅ **Redux Toolkit** for state management with MMKV persistence
-- ✅ **React Navigation v6** with TypeScript support
+- ✅ **React Navigation v7** with TypeScript support
 - ✅ **TypeScript** throughout the codebase
 - ✅ **Theme System** with light/dark mode support
 - ✅ **Custom Hooks** for common operations
