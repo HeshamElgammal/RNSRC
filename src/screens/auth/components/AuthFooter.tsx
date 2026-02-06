@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 import { Button } from '@components';
 
 export interface AuthFooterProps {

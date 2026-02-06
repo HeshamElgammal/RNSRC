@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useField } from 'formik';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 
 export interface InputProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
   name?: string; // For Formik integration

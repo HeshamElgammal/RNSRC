@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 import { Input, Button } from '@components';
 import { AuthLayout, AuthHeader, AuthFooter } from '../components';
 import { signupSchema, type SignupFormValues } from '@utils/validationSchemas';

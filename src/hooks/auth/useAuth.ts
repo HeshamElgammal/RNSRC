@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from './redux';
+import { useAppSelector, useAppDispatch } from '../redux';
 import { logout, updateUser, removeTokenFromKeychain } from '@store/slices/authSlice';
 import type { User } from '@store/slices/authSlice';
 

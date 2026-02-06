@@ -3,7 +3,7 @@ import { View, StyleSheet, ViewStyle } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from '@components';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 
 export interface AuthLayoutProps {
   children: React.ReactNode;

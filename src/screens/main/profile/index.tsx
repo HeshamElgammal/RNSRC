@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 import { useAuth } from '@hooks';
 import { Container } from '@components';
 import { createStyles } from './styles';

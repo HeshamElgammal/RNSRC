@@ -1,4 +1,4 @@
-import { useAppSelector } from './useAppSelector';
+import { useAppSelector } from '../redux';
 import { getTheme } from '@theme';
 import type { Theme } from '@theme/types';
 

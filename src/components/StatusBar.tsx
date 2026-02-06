@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar as RNStatusBar, StatusBarStyle, Platform } from 'react-native';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 
 export interface StatusBarProps {
   backgroundColor?: string;

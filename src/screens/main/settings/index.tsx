@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Switch, TouchableOpacity } from 'react-native';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 import { useAppSelector, useAppDispatch } from '@hooks';
 import { Container } from '@components';
 import { toggleTheme, setLanguage } from '@store/slices/appSlice';

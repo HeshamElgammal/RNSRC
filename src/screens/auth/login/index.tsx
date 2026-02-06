@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Formik } from 'formik';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { useTheme } from '@hooks/useTheme';
+import { useTheme } from '@hooks';
 import { Input, Button } from '@components';
 import { AuthLayout, AuthHeader, AuthFooter } from '../components';
 import {
