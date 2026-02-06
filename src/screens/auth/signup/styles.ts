@@ -16,4 +16,7 @@ export const createStyles = (theme: Theme) =>
     signupButton: {
       marginTop: theme.spacing.md,
     },
+    errorContainer: {
+      marginBottom: theme.spacing.md,
+    },
   });

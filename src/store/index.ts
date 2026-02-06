@@ -1,8 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import { mmkvStorage } from '@utils/storage';
-import authReducer from './slices/authSlice';
-import appReducer from './slices/appSlice';
+import { authReducer } from './auth';
+import { appReducer } from './main';
+import { baseApi } from './api/baseApi';
 
 // Create MMKV storage adapter for redux-persist
 const mmkvStorageAdapter = {
@@ -28,6 +29,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   app: appReducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -39,7 +41,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }),
+    }).concat(baseApi.middleware),
 });
 
 export const persistor = persistStore(store);

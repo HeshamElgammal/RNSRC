@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useTheme } from '@hooks';
 import { useAuth } from '@hooks';
 import { useAppDispatch } from '@hooks';
-import { Container, Button } from '@components';
-import { toggleTheme } from '@store/slices/appSlice';
+import { Container, Button, Text } from '@components';
+import { toggleTheme } from '@store/main';
 import { createStyles } from './styles';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { MainStackParamList } from '@navigation/types';
@@ -23,11 +23,17 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       scrollable
       contentContainerStyle={styles.content}
     >
-      <Text style={styles.welcomeText}>Welcome, {user?.name || 'User'}!</Text>
-      <Text style={styles.emailText}>{user?.email}</Text>
+      <Text variant="h2" style={{ marginBottom: theme.spacing.xs }}>
+        Welcome, {user?.name || 'User'}!
+      </Text>
+      <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xl }}>
+        {user?.email}
+      </Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Quick Actions</Text>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          Quick Actions
+        </Text>
         
         <Button
           title="View Profile"
@@ -63,19 +69,39 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.infoCard}>
-        <Text style={styles.infoTitle}>App Information</Text>
-        <Text style={styles.infoText}>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          App Information
+        </Text>
+        <Text variant="body" style={{ marginBottom: theme.spacing.sm }}>
           This is a React Native starter template with:
         </Text>
-        <Text style={styles.infoItem}>• Redux Toolkit for state management</Text>
-        <Text style={styles.infoItem}>• React Navigation v6</Text>
-        <Text style={styles.infoItem}>• TypeScript support</Text>
-        <Text style={styles.infoItem}>• Theme system with dark mode</Text>
-        <Text style={styles.infoItem}>• Custom hooks</Text>
-        <Text style={styles.infoItem}>• Auth flow implementation</Text>
-        <Text style={styles.infoItem}>• Formik + Yup for forms</Text>
-        <Text style={styles.infoItem}>• MMKV for fast storage</Text>
-        <Text style={styles.infoItem}>• Keychain for secure tokens</Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Redux Toolkit for state management
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • React Navigation v7
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • TypeScript support
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Theme system with dark mode
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Custom hooks
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Auth flow implementation
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Formik + Yup for forms
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • MMKV for fast storage
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing.xs }}>
+          • Keychain for secure tokens
+        </Text>
       </View>
     </Container>
   );

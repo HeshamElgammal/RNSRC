@@ -4,11 +4,11 @@ import {
   TextInputProps,
   StyleSheet,
   View,
-  Text,
   ViewStyle,
 } from 'react-native';
 import { useField } from 'formik';
 import { useTheme } from '@hooks';
+import { Text } from './Text';
 
 export interface InputProps extends Omit<TextInputProps, 'value' | 'onChangeText'> {
   name?: string; // For Formik integration
@@ -45,7 +45,11 @@ export const Input: React.FC<InputProps> = ({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && (
+        <Text variant="caption" style={{ marginBottom: theme.spacing.xs, fontWeight: '600' }}>
+          {label}
+        </Text>
+      )}
       <TextInput
         {...props}
         value={value}
@@ -58,7 +62,11 @@ export const Input: React.FC<InputProps> = ({
         ]}
         placeholderTextColor={theme.colors.textSecondary}
       />
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Text variant="caption" color="error" style={{ marginTop: theme.spacing.xs }}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 };

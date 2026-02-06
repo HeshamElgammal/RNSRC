@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '@hooks';
-import { Button } from '@components';
+import { Button, Text } from '@components';
 
 export interface AuthFooterProps {
   primaryText: string;
@@ -33,7 +33,9 @@ export const AuthFooter: React.FC<AuthFooterProps> = ({
       )}
 
       <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>{primaryText} </Text>
+        <Text variant="body" color="textSecondary">
+          {primaryText}{' '}
+        </Text>
         <Button
           title={secondaryText}
           variant="text"

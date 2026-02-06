@@ -2,13 +2,13 @@ import React from 'react';
 import {
   TouchableOpacity,
   TouchableOpacityProps,
-  Text,
   StyleSheet,
   ActivityIndicator,
   ViewStyle,
   TextStyle,
 } from 'react-native';
 import { useTheme } from '@hooks';
+import { Text } from './Text';
 
 export interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -51,7 +51,13 @@ export const Button: React.FC<ButtonProps> = ({
           size="small"
         />
       ) : (
-        <Text style={[styles.text, textStyle]}>{title}</Text>
+        <Text
+          variant="bodyBold"
+          color={variant === 'primary' || variant === 'secondary' ? 'background' : 'primary'}
+          style={textStyle}
+        >
+          {title}
+        </Text>
       )}
     </TouchableOpacity>
   );
@@ -87,20 +93,5 @@ const createStyles = (
     },
     buttonDisabled: {
       opacity: 0.5,
-    },
-    text: {
-      ...theme.typography.bodyBold,
-      ...(variant === 'primary' && {
-        color: theme.colors.background,
-      }),
-      ...(variant === 'secondary' && {
-        color: theme.colors.background,
-      }),
-      ...(variant === 'outline' && {
-        color: theme.colors.primary,
-      }),
-      ...(variant === 'text' && {
-        color: theme.colors.primary,
-      }),
     },
   });

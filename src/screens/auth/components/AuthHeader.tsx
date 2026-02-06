@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from '@hooks';
+import { Text } from '@components';
 
 export interface AuthHeaderProps {
   title: string;
@@ -13,8 +14,14 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({ title, subtitle }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      <Text variant="h1" style={{ marginBottom: theme.spacing.sm, textAlign: 'center' }}>
+        {title}
+      </Text>
+      {subtitle && (
+        <Text variant="body" color="textSecondary" style={{ textAlign: 'center' }}>
+          {subtitle}
+        </Text>
+      )}
     </View>
   );
 };

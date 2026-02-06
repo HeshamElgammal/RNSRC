@@ -1,9 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
+import { useAppDispatch } from '@hooks';
 import { useTheme } from '@hooks';
-import { Input, Button } from '@components';
+import { Input, Button, Text } from '@components';
 import { AuthLayout, AuthHeader, AuthFooter } from '../components';
+import { setAuth, saveTokenToKeychain } from '@store/auth';
+import { useSignupMutation } from '@store/auth';
 import { signupSchema, type SignupFormValues } from '@utils/validationSchemas';
 import { createStyles } from './styles';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,16 +16,33 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const dispatch = useAppDispatch();
   const styles = createStyles(theme);
+  
+  const [signup, { isLoading, error }] = useSignupMutation();
 
   const handleSignup = async (values: SignupFormValues) => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Signup:', values);
-      setIsLoading(false);
-    }, 1500);
+    try {
+      const result = await signup({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+
+      // Save token to keychain
+      await dispatch(saveTokenToKeychain(result.token));
+
+      // Update auth state
+      dispatch(
+        setAuth({
+          user: result.user,
+          token: result.token,
+        })
+      );
+    } catch (err: any) {
+      // Error is handled by RTK Query
+      console.error('Signup failed:', err);
+    }
   };
 
   return (
@@ -79,6 +99,14 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
               variant="outlined"
               formik
             />
+
+            {error && (
+              <View style={styles.errorContainer}>
+                <Text variant="caption" color="error" style={{ textAlign: 'center' }}>
+                  {'data' in error ? (error.data as any)?.message || 'Signup failed' : 'Signup failed'}
+                </Text>
+              </View>
+            )}
 
             <Button
               title="Sign Up"

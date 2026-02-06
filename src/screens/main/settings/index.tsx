@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Switch, TouchableOpacity } from 'react-native';
+import { View, Switch, TouchableOpacity } from 'react-native';
 import { useTheme } from '@hooks';
 import { useAppSelector, useAppDispatch } from '@hooks';
-import { Container } from '@components';
-import { toggleTheme, setLanguage } from '@store/slices/appSlice';
+import { Container, Text } from '@components';
+import { toggleTheme, setLanguage } from '@store/main';
 import { createStyles } from './styles';
 
 const SettingsScreen: React.FC = () => {
@@ -19,10 +19,12 @@ const SettingsScreen: React.FC = () => {
       contentContainerStyle={styles.content}
     >
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Appearance</Text>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          Appearance
+        </Text>
         
         <View style={styles.settingRow}>
-          <Text style={styles.settingLabel}>Dark Mode</Text>
+          <Text variant="body">Dark Mode</Text>
           <Switch
             value={themeMode === 'dark'}
             onValueChange={() => dispatch(toggleTheme())}
@@ -33,28 +35,32 @@ const SettingsScreen: React.FC = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Language</Text>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          Language
+        </Text>
         
         <TouchableOpacity
           style={styles.settingRow}
           onPress={() => dispatch(setLanguage('en'))}
         >
-          <Text style={styles.settingLabel}>English</Text>
-          {language === 'en' && <Text style={styles.checkmark}>✓</Text>}
+          <Text variant="body">English</Text>
+          {language === 'en' && <Text variant="bodyBold" color="primary" style={{ fontSize: 18 }}>✓</Text>}
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.settingRow}
           onPress={() => dispatch(setLanguage('es'))}
         >
-          <Text style={styles.settingLabel}>Spanish</Text>
-          {language === 'es' && <Text style={styles.checkmark}>✓</Text>}
+          <Text variant="body">Spanish</Text>
+          {language === 'es' && <Text variant="bodyBold" color="primary" style={{ fontSize: 18 }}>✓</Text>}
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About</Text>
-        <Text style={styles.aboutText}>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          About
+        </Text>
+        <Text variant="body" color="textSecondary" style={{ lineHeight: 24 }}>
           React Native Starter Template{'\n'}
           Version 1.0.0{'\n'}
           Built with React Native 0.83 (New Architecture)

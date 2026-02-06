@@ -16,4 +16,10 @@ export const createStyles = (theme: Theme) =>
     resetButton: {
       marginTop: theme.spacing.md,
     },
+    errorContainer: {
+      marginBottom: theme.spacing.md,
+    },
+    successContainer: {
+      marginBottom: theme.spacing.md,
+    },
   });

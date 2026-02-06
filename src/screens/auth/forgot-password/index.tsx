@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import { useTheme } from '@hooks';
-import { Input, Button } from '@components';
+import { Input, Button, Text } from '@components';
 import { AuthLayout, AuthHeader, AuthFooter } from '../components';
+import { useForgotPasswordMutation } from '@store/auth';
 import { forgotPasswordSchema, type ForgotPasswordFormValues } from '@utils/validationSchemas';
 import { createStyles } from './styles';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,17 +14,23 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'ForgotPassword'>;
 
 const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const [isLoading, setIsLoading] = useState(false);
   const styles = createStyles(theme);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
+  const [forgotPassword, { isLoading, error }] = useForgotPasswordMutation();
 
   const handleReset = async (values: ForgotPasswordFormValues) => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Reset password for:', values.email);
-      setIsLoading(false);
-      // Show success message or navigate
-    }, 1500);
+    try {
+      const result = await forgotPassword({
+        email: values.email,
+      }).unwrap();
+
+      setSuccessMessage(result.message || 'Password reset link sent to your email');
+    } catch (err: any) {
+      // Error is handled by RTK Query
+      console.error('Forgot password failed:', err);
+      setSuccessMessage(null);
+    }
   };
 
   return (
@@ -50,6 +57,22 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
               variant="outlined"
               formik
             />
+
+            {error && (
+              <View style={styles.errorContainer}>
+                <Text variant="caption" color="error" style={{ textAlign: 'center' }}>
+                  {'data' in error ? (error.data as any)?.message || 'Failed to send reset link' : 'Failed to send reset link'}
+                </Text>
+              </View>
+            )}
+
+            {successMessage && (
+              <View style={styles.successContainer}>
+                <Text variant="caption" color="success" style={{ textAlign: 'center' }}>
+                  {successMessage}
+                </Text>
+              </View>
+            )}
 
             <Button
               title="Send Reset Link"

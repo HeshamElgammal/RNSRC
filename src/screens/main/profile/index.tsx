@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { useTheme } from '@hooks';
 import { useAuth } from '@hooks';
-import { Container } from '@components';
+import { Container, Text } from '@components';
+import { useGetProfileQuery } from '@store/main';
 import { createStyles } from './styles';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { MainStackParamList } from '@navigation/types';
@@ -11,8 +12,39 @@ type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
 
 const ProfileScreen: React.FC<Props> = () => {
   const theme = useTheme();
-  const { user } = useAuth();
+  const { user: authUser } = useAuth();
   const styles = createStyles(theme);
+  
+  // Fetch profile from API (will use cached data if available)
+  const { data: profile, isLoading, error, refetch } = useGetProfileQuery();
+
+  // Use API profile if available, otherwise fall back to auth user
+  const user = profile || authUser;
+
+  if (isLoading && !user) {
+    return (
+      <Container statusBarColor="secondary" scrollable contentContainerStyle={styles.content}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container statusBarColor="secondary" scrollable contentContainerStyle={styles.content}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text variant="body" color="error" style={{ marginBottom: theme.spacing.md }}>
+            Failed to load profile
+          </Text>
+          <Text variant="caption" color="textSecondary" onPress={() => refetch()}>
+            Tap to retry
+          </Text>
+        </View>
+      </Container>
+    );
+  }
 
   return (
     <Container
@@ -22,23 +54,29 @@ const ProfileScreen: React.FC<Props> = () => {
     >
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
+          <Text variant="h1" color="background">
             {user?.name?.charAt(0).toUpperCase() || 'U'}
           </Text>
         </View>
-        <Text style={styles.name}>{user?.name || 'User'}</Text>
-        <Text style={styles.email}>{user?.email}</Text>
+        <Text variant="h2" style={{ marginBottom: theme.spacing.xs }}>
+          {user?.name || 'User'}
+        </Text>
+        <Text variant="body" color="textSecondary">
+          {user?.email}
+        </Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Information</Text>
+        <Text variant="h3" style={{ marginBottom: theme.spacing.md }}>
+          Account Information
+        </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>User ID:</Text>
-          <Text style={styles.infoValue}>{user?.id}</Text>
+          <Text variant="body" color="textSecondary">User ID:</Text>
+          <Text variant="bodyBold">{user?.id}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Email:</Text>
-          <Text style={styles.infoValue}>{user?.email}</Text>
+          <Text variant="body" color="textSecondary">Email:</Text>
+          <Text variant="bodyBold">{user?.email}</Text>
         </View>
       </View>
     </Container>

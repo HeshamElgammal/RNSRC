@@ -1,31 +1,28 @@
+/**
+ * Example: Using RTK Query in Login Screen
+ * 
+ * This file shows how to replace the manual API calls with RTK Query hooks
+ */
+
 import React from 'react';
 import { View } from 'react-native';
 import { Formik } from 'formik';
 import { useAppDispatch } from '@hooks';
-import { useTheme } from '@hooks';
 import { Input, Button, Text } from '@components';
-import { AuthLayout, AuthHeader, AuthFooter } from '../components';
-import {
-  setAuth,
-  saveTokenToKeychain,
-} from '@store/auth';
+import { AuthLayout, AuthHeader, AuthFooter } from '@screens/auth/components';
 import { useLoginMutation } from '@store/auth';
+import { setAuth, saveTokenToKeychain } from '@store/auth';
 import { loginSchema, type LoginFormValues } from '@utils/validationSchemas';
-import { createStyles } from './styles';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { AuthStackParamList } from '@navigation/types';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
-
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const theme = useTheme();
+const LoginScreenExample: React.FC = () => {
   const dispatch = useAppDispatch();
-  const styles = createStyles(theme);
   
+  // RTK Query hook - automatically handles loading, error states
   const [login, { isLoading, error }] = useLoginMutation();
 
   const handleLogin = async (values: LoginFormValues) => {
     try {
+      // Call the API using RTK Query
       const result = await login({
         email: values.email,
         password: values.password,
@@ -42,8 +39,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         })
       );
     } catch (err: any) {
-      // Error is handled by RTK Query
-      // You can access error details if needed
+      // Error is automatically handled by RTK Query
+      // You can access error details from the hook
       console.error('Login failed:', err);
     }
   };
@@ -61,14 +58,13 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         onSubmit={handleLogin}
       >
         {({ handleSubmit, isSubmitting }) => (
-          <View style={styles.form}>
+          <View>
             <Input
               name="email"
               label="Email"
               placeholder="Enter your email"
               keyboardType="email-address"
               autoCapitalize="none"
-              autoComplete="email"
               variant="outlined"
               formik
             />
@@ -79,17 +75,15 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               placeholder="Enter your password"
               secureTextEntry
               autoCapitalize="none"
-              autoComplete="password"
               variant="outlined"
               formik
             />
 
+            {/* Error from RTK Query */}
             {error && (
-              <View style={styles.errorContainer}>
-                <Text variant="caption" color="error" style={{ textAlign: 'center' }}>
-                  {'data' in error ? (error.data as any)?.message || 'Login failed' : 'Login failed'}
-                </Text>
-              </View>
+              <Text variant="caption" color="error" style={{ textAlign: 'center' }}>
+                {'data' in error ? (error.data as any)?.message : 'Login failed'}
+              </Text>
             )}
 
             <Button
@@ -98,15 +92,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               onPress={handleSubmit}
               loading={isLoading || isSubmitting}
               fullWidth
-              containerStyle={styles.loginButton}
-            />
-
-            <AuthFooter
-              primaryText="Don't have an account?"
-              secondaryText="Sign Up"
-              onSecondaryPress={() => navigation.navigate('Signup')}
-              showForgotPassword
-              onForgotPasswordPress={() => navigation.navigate('ForgotPassword')}
             />
           </View>
         )}
@@ -115,4 +100,58 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+/**
+ * Example: Using Query Hook (GET request)
+ */
+import { useGetProfileQuery } from '@store/main';
+
+const ProfileScreenExample: React.FC = () => {
+  // Automatically fetches on mount, handles loading/error states
+  const { data, isLoading, error, refetch } = useGetProfileQuery();
+
+  if (isLoading) {
+    return <Text>Loading profile...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error loading profile</Text>;
+  }
+
+  return (
+    <View>
+      <Text variant="h2">{data?.name}</Text>
+      <Text variant="body">{data?.email}</Text>
+      <Button title="Refresh" onPress={() => refetch()} />
+    </View>
+  );
+};
+
+/**
+ * Example: Using Update Mutation
+ */
+import { useUpdateProfileMutation } from '@store/main';
+
+const UpdateProfileExample: React.FC = () => {
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
+  const handleUpdate = async () => {
+    try {
+      const result = await updateProfile({
+        name: 'New Name',
+        email: 'new@email.com',
+      }).unwrap();
+
+      console.log('Profile updated:', result);
+    } catch (err) {
+      console.error('Update failed:', err);
+    }
+  };
+
+  return (
+    <Button
+      title="Update Profile"
+      onPress={handleUpdate}
+      loading={isLoading}
+    />
+  );
+};
